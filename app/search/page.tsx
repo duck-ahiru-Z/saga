@@ -1,12 +1,12 @@
 // app/search/page.tsx
-'use client'; // ★動くパーツにする
+'use client';
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import styles from "./search.module.css";
 
-// データの型（TypeScript用のおまじない）
+// データの型（status を追加！）
 type Vegetable = {
   id: string;
   name: string;
@@ -18,73 +18,124 @@ type Vegetable = {
   originalPrice: number;
   stock: string;
   image: string;
+  status?: string; // ★ 「販売中」や「審査中」などの状態を入れる箱
 };
 
 export default function SearchPage() {
-  // ★ データベースから取ってきたデータを保存する箱
   const [vegetables, setVegetables] = useState<Vegetable[]>([]);
-  // ★ 読み込み中かどうかを判定するフラグ
   const [isLoading, setIsLoading] = useState(true);
 
-  // ★ ページが開かれた瞬間に1回だけ実行される魔法（useEffect）
+  // ★ 検索用の「状態（今何が入力されているか）」を覚えておく変数
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+
+  // ページが開かれた時にFirebaseからデータを取ってくる
   useEffect(() => {
     const fetchVegetables = async () => {
       try {
-        // Firestoreの「vegetables」コレクションから、作成日の新しい順（desc）でデータを取得する準備
         const q = query(collection(db, "vegetables"), orderBy("createdAt", "desc"));
         const querySnapshot = await getDocs(q);
         
-        // 取ってきたデータを、画面で使いやすい形（配列）に変換する
         const vegData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data()
         })) as Vegetable[];
         
-        setVegetables(vegData); // 変数にセット！
+        setVegetables(vegData);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
       } finally {
-        setIsLoading(false); // 読み込み完了
+        setIsLoading(false);
       }
     };
 
-    fetchVegetables(); // 上で作った関数を実行
+    fetchVegetables();
   }, []);
+
+  // ★ ここが超重要！「すべての野菜」から「条件に合う野菜」だけをリアルタイムで選び出す魔法
+  const filteredVegetables = vegetables.filter((veg) => {
+    // 1. 文字検索（野菜名 or 農家名 or 地域 に文字が含まれているか）
+    const matchSearch = searchTerm === '' || 
+      veg.name.includes(searchTerm) || 
+      veg.farmer.includes(searchTerm) || 
+      veg.location.includes(searchTerm);
+
+    // 2. カテゴリー検索
+    const matchCategory = selectedCategory === '' || veg.category === selectedCategory;
+
+    // 3. 状態（ステータス）検索
+    // ※過去に出品したデータにはstatusが入っていないので、仮に「審査中」として扱います
+    const currentStatus = veg.status || '審査中'; 
+    const matchStatus = selectedStatus === '' || currentStatus === selectedStatus;
+
+    // 3つの条件「すべて」をクリアした野菜だけを画面に残す！
+    return matchSearch && matchCategory && matchStatus;
+  });
 
   return (
     <div className={styles.container}>
       <h2 className={styles.pageTitle}>規格外野菜を探す</h2>
       <p className={styles.pageSubtitle}>佐賀の農家が丹精込めて育てた、美味しい規格外野菜をお得に購入できます</p>
 
-      {/* 検索フィルター */}
+      {/* ===== 検索フィルター（ここが進化しました！） ===== */}
       <div className={styles.filterSection}>
-        <input type="text" placeholder="🔍 野菜名、農家名、地域で検索..." className={styles.searchInput} />
-        <select className={styles.categorySelect}>
+        {/* 文字入力 */}
+        <input 
+          type="text" 
+          placeholder="🔍 野菜名、農家名、地域で検索..." 
+          className={styles.searchInput} 
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)} // ★打つたびに更新
+        />
+        
+        {/* カテゴリー選択 */}
+        <select 
+          className={styles.categorySelect} 
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)} // ★選ぶたびに更新
+        >
           <option value="">▽ すべてのカテゴリー</option>
           <option value="果菜類">果菜類</option>
           <option value="根菜類">根菜類</option>
           <option value="葉菜類">葉菜類</option>
         </select>
-      </div>
 
-      {/* 読み込み中の表示 */}
+        {/* 状態（ステータス）選択 */}
+        <select 
+          className={styles.categorySelect} 
+          value={selectedStatus}
+          onChange={(e) => setSelectedStatus(e.target.value)} // ★選ぶたびに更新
+        >
+          <option value="">▽ すべての状態</option>
+          <option value="販売中">販売中</option>
+          <option value="審査中">審査中</option>
+        </select>
+      </div>
+      {/* ================================================= */}
+
       {isLoading ? (
         <p style={{ textAlign: 'center', padding: '40px', color: '#666' }}>データを読み込み中...</p>
       ) : (
         <>
-          <p className={styles.resultCount}>{vegetables.length}件の野菜が見つかりました</p>
+          {/* ★ vegetables.length ではなく、絞り込んだあとの filteredVegetables.length を表示 */}
+          <p className={styles.resultCount}>{filteredVegetables.length}件の野菜が見つかりました</p>
 
           <div className={styles.grid}>
-            {/* 取ってきた本物のデータでカードを作る！ */}
-            {vegetables.map((veg) => {
-              // 割引率の計算（例: 300円から150円なら 50% OFF）
+            {/* ★ ここも filteredVegetables を使ってカードを作ります */}
+            {filteredVegetables.map((veg) => {
               const discountRate = Math.round((1 - veg.price / veg.originalPrice) * 100);
+              const statusLabel = veg.status || '審査中'; // バッジ表示用
 
               return (
                 <div key={veg.id} className={styles.card}>
-                  {/* 割引率を自動計算して表示 */}
                   <div className={styles.discountBadge}>{discountRate}% OFF</div>
-                  {/* 画像はダミーURLが入ります */}
+                  
+                  {/* 画像の左上に「審査中」などの状態バッジを追加 */}
+                  <div style={{ position: 'absolute', top: 12, left: 12, backgroundColor: statusLabel === '販売中' ? '#00A040' : '#FF9800', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
+                    {statusLabel}
+                  </div>
+
                   <img src={veg.image || "https://placehold.jp/24/cccccc/ffffff/400x300.png?text=NoImage"} alt={veg.name} className={styles.cardImage} />
                   
                   <div className={styles.cardContent}>
@@ -118,11 +169,10 @@ export default function SearchPage() {
             })}
           </div>
 
-          {/* 出品が0件の時のメッセージ */}
-          {vegetables.length === 0 && (
+          {filteredVegetables.length === 0 && (
             <div style={{ textAlign: 'center', padding: '60px 0', color: '#666' }}>
-              <p>現在出品されている野菜はありません。</p>
-              <p>あなたが最初の出品者になりませんか？</p>
+              <p>条件に一致する野菜が見つかりませんでした。</p>
+              <p>別のキーワードやカテゴリーでお試しください。</p>
             </div>
           )}
         </>
