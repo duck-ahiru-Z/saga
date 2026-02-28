@@ -166,3 +166,74 @@
 .submitBtn:hover {
   opacity: 0.9;
 }
+
+
+
+
+/* --- Step2 用の追加デザイン --- */
+.select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #EAEAEA;
+  border-radius: 8px;
+  font-size: 15px;
+  background-color: #FAFAFA;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #00A040;
+  background-color: white;
+}
+
+.warningText {
+  font-size: 13px;
+  color: #856404;
+  background-color: #fff3cd; /* 薄い黄色 */
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.backBtn {
+  flex: 1;
+  background-color: white;
+  color: #666;
+  border: 1px solid #CCCCCC;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.backBtn:hover {
+  background-color: #F5F5F5;
+}
+
+.primaryBtn {
+  flex: 2;
+  background-color: #00A040;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.primaryBtn:hover {
+  opacity: 0.9;
+}
