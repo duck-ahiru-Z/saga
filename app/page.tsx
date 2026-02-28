@@ -1,11 +1,37 @@
-// app/page.tsx
+// app/page.tsx の一部変更
+import Link from "next/link";
+import styles from "./page.module.css"; // ★追加
+
 export default function HomePage() {
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h2 style={{ color: "#00A040", fontSize: "32px" }}>
-        佐賀から世界を救う<br/>農業マッチング
-      </h2>
-      <p>規格外野菜を有効活用し、食糧危機に立ち向かう。</p>
+    <div>
+      <section className={styles.heroSection}> {/* ★書き方変更 */}
+        <div className={styles.heroText}>
+          {/* ...中身はそのまま... */}
+          <Link href="/search" className={styles.heroBtn}>
+            野菜を探す →
+          </Link>
+        </div>
+        {/* 画像エリアはそのまま */}
+      </section>
+
+      <section className={styles.statsSection}>
+        {/* ...各クラスを styles.statItem などに変更... */}
+        <div className={styles.statItem}>
+          {/* ...中身はそのまま... */}
+        </div>
+      </section>
+
+      <section className={styles.issuesSection}>
+        <h2 style={{ fontSize: '28px', color: '#333' }}>私たちが解決する社会課題</h2>
+        {/* ... */}
+        <div className={styles.issuesCards}>
+          <div className={styles.issueCard}> {/* ★書き方変更 */}
+             {/* ...中身はそのまま... */}
+          </div>
+          {/* ...他のカードも styles.issueCard に... */}
+        </div>
+      </section>
     </div>
   );
 }

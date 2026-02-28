@@ -1,0 +1,78 @@
+/* app/page.module.css */
+
+/* 1. 緑の大きな背景（ヒーローセクション） */
+.heroSection {
+  background-color: #00A040;
+  color: white;
+  padding: 80px 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 40px 40px;
+}
+
+.heroText {
+  flex: 1;
+}
+
+.heroText h2 {
+  font-size: 42px;
+  margin: 10px 0 20px;
+  line-height: 1.4;
+}
+
+.heroBtn {
+  background-color: white;
+  color: #00A040;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: opacity 0.2s;
+}
+
+.heroBtn:hover {
+  opacity: 0.8;
+}
+
+/* 2. 4つの数字が並ぶセクション */
+.statsSection {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px 5%;
+  background-color: #FAFAFA;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statItem h3 {
+  font-size: 28px;
+  color: #333;
+  margin: 5px 0;
+}
+
+/* 3. 社会課題のカードセクション */
+.issuesSection {
+  padding: 60px 5%;
+  text-align: center;
+}
+
+.issuesCards {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.issueCard {
+  background-color: white;
+  padding: 40px 30px;
+  border-radius: 16px;
+  width: 30%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-align: left;
+}
