@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import styles from "./search.module.css";
+import Link from 'next/link';
 
 // データの型（status を追加！）
 type Vegetable = {
@@ -78,7 +79,7 @@ export default function SearchPage() {
       <h2 className={styles.pageTitle}>規格外野菜を探す</h2>
       <p className={styles.pageSubtitle}>佐賀の農家が丹精込めて育てた、美味しい規格外野菜をお得に購入できます</p>
 
-      {/* ===== 検索フィルター（ここが進化しました！） ===== */}
+      {/* ===== 検索フィルター ===== */}
       <div className={styles.filterSection}>
         {/* 文字入力 */}
         <input 
@@ -86,14 +87,14 @@ export default function SearchPage() {
           placeholder="🔍 野菜名、農家名、地域で検索..." 
           className={styles.searchInput} 
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)} // ★打つたびに更新
+          onChange={(e) => setSearchTerm(e.target.value)} 
         />
         
         {/* カテゴリー選択 */}
         <select 
           className={styles.categorySelect} 
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)} // ★選ぶたびに更新
+          onChange={(e) => setSelectedCategory(e.target.value)} 
         >
           <option value="">▽ すべてのカテゴリー</option>
           <option value="果菜類">果菜類</option>
@@ -105,7 +106,7 @@ export default function SearchPage() {
         <select 
           className={styles.categorySelect} 
           value={selectedStatus}
-          onChange={(e) => setSelectedStatus(e.target.value)} // ★選ぶたびに更新
+          onChange={(e) => setSelectedStatus(e.target.value)} 
         >
           <option value="">▽ すべての状態</option>
           <option value="販売中">販売中</option>
@@ -118,20 +119,21 @@ export default function SearchPage() {
         <p style={{ textAlign: 'center', padding: '40px', color: '#666' }}>データを読み込み中...</p>
       ) : (
         <>
-          {/* ★ vegetables.length ではなく、絞り込んだあとの filteredVegetables.length を表示 */}
           <p className={styles.resultCount}>{filteredVegetables.length}件の野菜が見つかりました</p>
 
           <div className={styles.grid}>
-            {/* ★ ここも filteredVegetables を使ってカードを作ります */}
             {filteredVegetables.map((veg) => {
               const discountRate = Math.round((1 - veg.price / veg.originalPrice) * 100);
-              const statusLabel = veg.status || '審査中'; // バッジ表示用
+              const statusLabel = veg.status || '審査中';
 
               return (
-                <div key={veg.id} className={styles.card}>
+                <Link 
+                  href={`/item/${veg.id}`} 
+                  key={veg.id} 
+                  className={styles.card}
+                  style={{ textDecoration: 'none', color: 'inherit', display: 'block' }} // ★リンクの線を消す
+                >
                   <div className={styles.discountBadge}>{discountRate}% OFF</div>
-                  
-                  {/* 画像の左上に「審査中」などの状態バッジを追加 */}
                   <div style={{ position: 'absolute', top: 12, left: 12, backgroundColor: statusLabel === '販売中' ? '#00A040' : '#FF9800', color: 'white', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
                     {statusLabel}
                   </div>
@@ -164,7 +166,7 @@ export default function SearchPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
