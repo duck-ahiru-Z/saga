@@ -1,5 +1,5 @@
 // app/page.tsx
-'use client'; // ★ 動くパーツにする
+'use client'; 
 
 import { useState, useEffect } from 'react';
 import Link from "next/link";
@@ -8,16 +8,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import styles from "./page.module.css";
 
 export default function HomePage() {
-  // ★ 実際の出品数を保存する変数
   const [vegCount, setVegCount] = useState(0);
 
-  // ★ ページが開かれた瞬間にFirebaseへ「出品数」を聞きに行く
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        // vegetablesコレクション（箱）の中身をすべて取得
         const snapshot = await getDocs(collection(db, "vegetables"));
-        // その「個数（size）」を変数にセット！
         setVegCount(snapshot.size);
       } catch (error) {
         console.error("出品数の取得に失敗しました:", error);
@@ -45,7 +41,6 @@ export default function HomePage() {
           </Link>
         </div>
         
-        {/* 右側の画像エリア */}
         <div style={{ flex: 1, textAlign: 'right' }}>
           <img 
             src="https://placehold.jp/24/cccccc/ffffff/500x600.png?text=HeroImage" 
@@ -55,29 +50,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== 2. 4つの数字・実績セクション（ここが本物になります！） ===== */}
-      <section className={styles.statsSection}>
-        <div className={styles.statItem}>
-          <div style={{ color: '#00A040', fontSize: '24px' }}>🌍</div>
-          <h3>100億人</h3>
-          <p style={{ fontSize: '12px', color: '#666' }}>2050年の推計人口</p>
+      {/* ===== 2. 100億人の未来を救う実績セクション（融合版！） ===== */}
+      <section className={styles.statsSection} style={{ backgroundColor: '#1A3622', color: 'white', padding: '60px 5%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <h2 style={{ fontSize: '32px', margin: '0 0 16px 0', color: '#4CAF50' }}>PROJECT: 100 BILLION</h2>
+          <p style={{ fontSize: '16px', opacity: 0.9, maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+            2050年、世界の人口は100億人を突破します。<br/>
+            私たちが規格外野菜を救うごとに、未来の食卓と地球環境が守られます。
+          </p>
         </div>
-        <div className={styles.statItem}>
-          <div style={{ color: '#E53935', fontSize: '24px' }}>📉</div>
-          <h3>30%</h3>
-          <p style={{ fontSize: '12px', color: '#666' }}>規格外野菜の廃棄率</p>
+
+        {/* コミュニティ全体の貢献度メーター */}
+        <div style={{ maxWidth: '800px', margin: '0 auto 40px auto', background: 'rgba(255,255,255,0.1)', padding: '24px', borderRadius: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <span style={{ fontWeight: 'bold' }}>未来へ届けた食糧（推計）</span>
+            <span style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: '20px' }}>{vegCount * 5 * 3} 食分</span>
+          </div>
+          <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${Math.min(((vegCount * 5 * 3) / 10000) * 100, 100)}%`, height: '100%', background: '#4CAF50', transition: 'width 1s ease' }}></div>
+          </div>
+          <p style={{ textAlign: 'right', fontSize: '12px', opacity: 0.7, margin: '8px 0 0 0' }}>
+            目標: 10,000食まで あと{Math.max(10000 - (vegCount * 5 * 3), 0)}食
+          </p>
         </div>
-        <div className={styles.statItem}>
-          <div style={{ color: '#1E88E5', fontSize: '24px' }}>🍅</div>
-          {/* ★ Firebaseから取得した実際の出品数を表示！ */}
-          <h3>{vegCount}件</h3>
-          <p style={{ fontSize: '12px', color: '#666' }}>現在の出品数</p>
-        </div>
-        <div className={styles.statItem}>
-          <div style={{ color: '#8E24AA', fontSize: '24px' }}>⚖️</div>
-          {/* ★ 出品数 × 5kg で仮の「フードロス削減量」を自動計算！ */}
-          <h3>{vegCount * 5}kg</h3>
-          <p style={{ fontSize: '12px', color: '#666' }}>フードロス削減量</p>
+
+        {/* 3つの環境インパクト */}
+        <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '24px', borderRadius: '12px', flex: '1 1 200px', textAlign: 'center', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>⚖️</div>
+            <h3 style={{ fontSize: '28px', margin: '0 0 4px 0', color: '#FFF' }}>{vegCount * 5} <span style={{fontSize: '16px'}}>kg</span></h3>
+            <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>救ったフードロス</p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '24px', borderRadius: '12px', flex: '1 1 200px', textAlign: 'center', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>☁️</div>
+            <h3 style={{ fontSize: '28px', margin: '0 0 4px 0', color: '#FFF' }}>{vegCount * 5 * 2.5} <span style={{fontSize: '16px'}}>kg</span></h3>
+            <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>削減したCO2排出量</p>
+          </div>
+          <div style={{ background: 'rgba(255,255,255,0.05)', padding: '24px', borderRadius: '12px', flex: '1 1 200px', textAlign: 'center', border: '1px solid rgba(76, 175, 80, 0.3)' }}>
+            <div style={{ fontSize: '32px', marginBottom: '8px' }}>💧</div>
+            <h3 style={{ fontSize: '28px', margin: '0 0 4px 0', color: '#FFF' }}>{(vegCount * 5 * 2000).toLocaleString()} <span style={{fontSize: '16px'}}>L</span></h3>
+            <p style={{ fontSize: '12px', color: '#AAA', margin: 0 }}>節約した水資源</p>
+          </div>
         </div>
       </section>
 
