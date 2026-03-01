@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import styles from './item.module.css';
+import Link from 'next/link';
 
 // データの型
 type Vegetable = {
@@ -111,9 +112,12 @@ export default function ItemDetailPage() {
             <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>📍 所在地: {vegetable.location}</p>
           </div>
 
-          <button className={styles.buyBtn} onClick={() => alert("購入機能は準備中です！")}>
-            購入手続きへ進む
-          </button>
+{/* button を Link に変えて href を指定！ ※Linkのインポートを忘れずに！ */}
+          <Link href={`/checkout/${vegetable.id}`} style={{ textDecoration: 'none' }}>
+            <button className={styles.buyBtn}>
+              購入手続きへ進む
+            </button>
+          </Link>
         </div>
       </div>
     </div>
