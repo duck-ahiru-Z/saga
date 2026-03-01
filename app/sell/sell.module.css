@@ -237,3 +237,44 @@
 .primaryBtn:hover {
   opacity: 0.9;
 }
+
+
+/* =========================================
+   📱 スマホ用レスポンシブデザイン (768px以下)
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 5%;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  /* ステップバーを画面幅に収める */
+  .stepLine {
+    width: 16px;
+    margin: 0 8px;
+  }
+
+  .step span {
+    font-size: 12px; /* 文字を少し小さく */
+  }
+
+  /* 白いカードの余白を減らして、入力欄を広く確保 */
+  .formCard {
+    padding: 24px 16px;
+  }
+
+  /* 戻る・次へボタンを縦並びにし、「次へ(メイン)」を上に配置 */
+  .buttonGroup {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backBtn,
+  .primaryBtn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

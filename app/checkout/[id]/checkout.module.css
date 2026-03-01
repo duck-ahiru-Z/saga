@@ -126,3 +126,33 @@
 .submitBtn:hover {
   opacity: 0.9;
 }
+
+
+/* =========================================
+   📱 スマホ用レスポンシブデザイン追加分 (768px以下)
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 5%;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  /* 入力フォームのカードの余白を減らして画面を広く */
+  .formSection {
+    padding: 24px 16px;
+  }
+
+  /* スマホだと入力欄が少し大きめの方がタップしやすい */
+  .input, .select {
+    padding: 16px 12px;
+    font-size: 16px; 
+  }
+
+  .submitBtn {
+    padding: 20px; /* 注文ボタンは特に大きく！ */
+  }
+}

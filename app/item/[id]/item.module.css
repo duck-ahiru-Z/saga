@@ -140,3 +140,40 @@
 .buyBtn:hover {
   opacity: 0.9;
 }
+
+
+/* =========================================
+   📱 スマホ用レスポンシブデザイン追加分 (768px以下)
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 16px 5%;
+    margin: 20px auto;
+  }
+
+  /* スマホでは画像の角丸を上部だけにして、画面端まで広げるような見せ方に */
+  .mainImage {
+    border-radius: 12px 12px 0 0;
+  }
+
+  /* タイトルと価格の文字サイズを調整 */
+  .title {
+    font-size: 24px;
+  }
+
+  .priceBox {
+    padding: 16px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+
+  /* 購入ボタンを下部に固定（スティッキー）にして常に押せるようにする裏技 */
+  .buyBtn {
+    position: sticky;
+    bottom: 16px;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 160, 64, 0.3);
+  }
+}

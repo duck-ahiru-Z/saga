@@ -159,3 +159,60 @@
   background: #FAFAFA;
   border-radius: 12px;
 }
+
+/* =========================================
+   📱 スマホ用レスポンシブデザイン (768px以下)
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 5%;
+  }
+
+  /* プロフィールカードを縦並び＆中央揃えに */
+  .profileCard {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  /* バッジ（お試し体験中）が変な位置に行かないように調整 */
+  .badge {
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 0;
+  }
+
+  /* 貢献度や出品数の数字を縦並びに */
+  .stats {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .statItem {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* タブメニュー（購入履歴/出品した野菜）を横幅いっぱいに等分 */
+  .tabs {
+    justify-content: center;
+  }
+
+  .tabBtn {
+    flex: 1;
+    font-size: 14px;
+    padding: 12px 8px;
+  }
+
+  /* 履歴カード：スマホでは写真を上に、情報を下に積む */
+  .historyCard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .historyStatus {
+    margin-top: 8px;
+  }
+}

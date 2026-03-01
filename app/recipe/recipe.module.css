@@ -253,3 +253,70 @@
   font-size: 12px;
   color: #999;
 }
+
+
+/* =========================================
+   📱 スマホ用レスポンシブデザイン (768px以下)
+   ========================================= */
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 5%;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .pageTitleIcon {
+    font-size: 32px;
+  }
+
+  /* 3つの特徴カードを縦に並べる */
+  .features {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* AIレシピジェネレーターの紫エリアをスマホ用に最適化 */
+  .generatorBanner {
+    flex-direction: column;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .generatorContent {
+    padding-right: 0;
+    width: 100%;
+  }
+
+  .generatorTitle {
+    justify-content: center; /* アイコンと文字を真ん中に */
+    font-size: 20px;
+  }
+
+  /* 入力欄とボタンを縦並びにし、横幅いっぱいに広げる */
+  .generatorInputGroup {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .generatorInput {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .generatorBtn {
+    width: 100%;
+    padding: 16px; /* スマホでタップしやすいように高さを出す */
+  }
+
+  /* レシピ一覧のカードを確実に1列にする */
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .cardImage {
+    height: 200px;
+  }
+}
