@@ -2,9 +2,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link'; // ★ Linkをインポート
 import styles from "./recipe.module.css";
+import { initialRecipes } from '@/lib/recipes'; // ★ 外部ファイルに分けたレシピデータを読み込む
 
-// ★ 待ち時間に表示する豆知識リスト
+// 待ち時間に表示する豆知識リスト
 const TRIVIA_LIST = [
   "💡 豆知識: 曲がったきゅうりは、水分ストレスなどで甘みが増していることがあります！",
   "💡 豆知識: 日本では年間約200万トンもの規格外野菜が廃棄されています。",
@@ -12,13 +14,6 @@ const TRIVIA_LIST = [
   "💡 豆知識: 二股の人参は、栄養たっぷりのふかふかな土壌で元気に育った証拠です。",
   "💡 豆知識: 規格外野菜を食べることは、CO2削減や農家さんの支援に直結します！",
   "🍳 AIがレシピを一生懸命考えています... もう少々お待ちください..."
-];
-
-// 固定の既存レシピデータ
-const recipes = [
-  { id: 1, title: "規格外トマトの濃厚トマトパスタ", desc: "形が不揃いなトマトでも、完熟の甘みが広がる本格的なトマトソースパスタ。", time: "25分", servings: "2人前", mainIngredient: "トマト", tag: "簡単", image: "https://placehold.jp/24/ffb6b9/ffffff/400x300.png?text=トマトパスタ" },
-  { id: 2, title: "曲がり人参のポタージュスープ", desc: "曲がった人参も、スープにすれば形は関係なし。優しい甘さのポタージュ。", time: "30分", servings: "4人前", mainIngredient: "人参", tag: "簡単", image: "https://placehold.jp/24/ffdfba/ffffff/400x300.png?text=人参スープ" },
-  { id: 3, title: "曲がりきゅうりの即席浅漬け", desc: "曲がったきゅうりこそ、味が染み込みやすい！簡単で美味しい浅漬け。", time: "10分", servings: "2人前", mainIngredient: "きゅうり", tag: "簡単", image: "https://placehold.jp/24/baffc9/ffffff/400x300.png?text=浅漬け" },
 ];
 
 type GeneratedRecipe = {
@@ -35,7 +30,7 @@ export default function RecipePage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [triviaIndex, setTriviaIndex] = useState(0);
 
-  // ★ 既存レシピの検索用ステート
+  // 既存レシピの検索用ステート
   const [recipeSearch, setRecipeSearch] = useState('');
 
   useEffect(() => {
@@ -77,8 +72,8 @@ export default function RecipePage() {
     }
   };
 
-  // ★ 検索バーに入力された文字で既存レシピを絞り込む
-  const filteredRecipes = recipes.filter(recipe => 
+  // ★ 読み込んだ initialRecipes を使って絞り込みを行う
+  const filteredRecipes = initialRecipes.filter(recipe => 
     recipe.title.includes(recipeSearch) || recipe.mainIngredient.includes(recipeSearch)
   );
 
@@ -149,7 +144,6 @@ export default function RecipePage() {
         </div>
       )}
 
-      {/* 既存レシピの検索セクション */}
       <div className={styles.searchSection}>
         <input 
           type="text" 
@@ -162,10 +156,15 @@ export default function RecipePage() {
 
       <p className={styles.resultCount}>{filteredRecipes.length}件のレシピが見つかりました</p>
       
-      {/* ★ レシピカード一覧を動的に表示 */}
       <div className={styles.grid}>
         {filteredRecipes.map((recipe) => (
-          <div key={recipe.id} className={styles.card}>
+          
+          <Link 
+            href={`/recipe/${recipe.id}`} 
+            key={recipe.id} 
+            className={styles.card}
+            style={{ textDecoration: 'none', color: 'inherit', display: 'block' }} 
+          >
             <div className={styles.badges}>
               <span className={styles.badgeAi}>✨ おすすめ</span>
               <span className={styles.badgeTag}>{recipe.tag}</span>
@@ -180,7 +179,7 @@ export default function RecipePage() {
                 <span>🥕 {recipe.mainIngredient}</span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
